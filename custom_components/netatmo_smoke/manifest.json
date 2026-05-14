@@ -1,0 +1,12 @@
+{
+  "domain": "netatmo_smoke",
+  "name": "Netatmo Smoke Detectors (Home API)",
+  "version": "1.1.0",
+  "documentation": "https://github.com/beckerj/home-assistant-netatmo-smoke",
+  "requirements": ["aiohttp>=3.8.0"],
+  "dependencies": [],
+  "codeowners": ["@beckerj"],
+  "config_flow": true,
+  "iot_class": "cloud_polling",
+  "integration_type": "device"
+}

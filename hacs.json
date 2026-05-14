@@ -1,0 +1,7 @@
+{
+  "name": "Netatmo Smoke Detectors (Home API)",
+  "content_in_root": false,
+  "country": ["DE"],
+  "homeassistant": "2024.1.0",
+  "documentation": "https://github.com/beckerj/home-assistant-netatmo-smoke"
+}

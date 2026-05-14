@@ -1,0 +1,22 @@
+{
+  "config": {
+    "abort": {},
+    "error": {
+      "cannot_connect": "Failed to connect to the Netatmo API. Check your internet connection and credentials.",
+      "invalid_auth": "Invalid credentials. Please check your client ID, client secret and refresh token.",
+      "missing_data": "All fields are required.",
+      "no_modules": "No smoke detector modules found in your Netatmo home."
+    },
+    "step": {
+      "user": {
+        "title": "Netatmo Smoke Detectors",
+        "description": "Enter your Netatmo API credentials. You need a client ID, client secret and refresh token from the Netatmo developer portal.",
+        "data": {
+          "client_id": "Client ID",
+          "client_secret": "Client Secret",
+          "refresh_token": "Refresh Token"
+        }
+      }
+    }
+  }
+}
