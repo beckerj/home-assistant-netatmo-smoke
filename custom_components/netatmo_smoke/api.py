@@ -78,7 +78,13 @@ class NetatmoHomeAPI:
                 async with self._session.request(
                     method, url, headers=headers, **kwargs
                 ) as response:
-                    if response.status == 401 and attempt < max_retries - 1:
+                    if response.status in (401, 403) and attempt < max_retries - 1:
+                        _LOGGER.warning(
+                            "Netatmo API returned %d, refreshing token and retrying (%d/%d)",
+                            response.status,
+                            attempt + 1,
+                            max_retries,
+                        )
                         await self.refresh()
                         continue
 
