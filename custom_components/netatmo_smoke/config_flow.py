@@ -16,11 +16,10 @@ from .const import (
 from .api import NetatmoHomeAPI
 
 
-def _poll_interval_schema(value: int) -> int:
-    return vol.All(
-        vol.Coerce(int),
-        vol.Range(min=MIN_POLL_INTERVAL_MINUTES, max=MAX_POLL_INTERVAL_MINUTES),
-    )(value)
+POLL_INTERVAL_VALIDATOR = vol.All(
+    vol.Coerce(int),
+    vol.Range(min=MIN_POLL_INTERVAL_MINUTES, max=MAX_POLL_INTERVAL_MINUTES),
+)
 
 
 def _get_poll_interval(entry) -> int:
@@ -80,7 +79,7 @@ class NetatmoSmokeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_POLL_INTERVAL,
                 default=DEFAULT_POLL_INTERVAL_MINUTES,
                 description="Poll interval in minutes",
-            ): _poll_interval_schema,
+            ): POLL_INTERVAL_VALIDATOR,
         })
 
         return self.async_show_form(
@@ -112,7 +111,7 @@ class NetatmoSmokeOptionsFlowHandler(config_entries.OptionsFlow):
             vol.Required(
                 CONF_POLL_INTERVAL,
                 default=_get_poll_interval(self.entry),
-            ): _poll_interval_schema,
+            ): POLL_INTERVAL_VALIDATOR,
         })
 
         return self.async_show_form(step_id="init", data_schema=schema)
