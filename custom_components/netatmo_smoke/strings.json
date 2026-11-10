@@ -14,7 +14,19 @@
         "data": {
           "client_id": "Client ID",
           "client_secret": "Client Secret",
-          "refresh_token": "Refresh Token"
+          "refresh_token": "Refresh Token",
+          "poll_interval": "Poll interval (minutes). Netatmo is reducing rate limits for polling-based APIs from March 2027 — increase this value if you encounter rate-limit errors."
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Netatmo Smoke Detectors Options",
+        "description": "Polling interval for the Netatmo Security API. Netatmo is reducing rate limits for polling-based APIs from March 2027 — increase this value if you encounter rate-limit errors.",
+        "data": {
+          "poll_interval": "Poll interval (minutes)"
         }
       }
     }

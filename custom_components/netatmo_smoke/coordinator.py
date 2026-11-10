@@ -7,7 +7,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import NetatmoHomeAPI
-from .const import DOMAIN
+from .const import DOMAIN, CONF_POLL_INTERVAL, DEFAULT_POLL_INTERVAL_MINUTES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -16,11 +16,16 @@ class NetatmoSmokeCoordinator(DataUpdateCoordinator):
     """Coordinator that polls Netatmo gethomedata + homestatus for NSD modules."""
 
     def __init__(self, hass, entry):
+        # Options take precedence over config data; default is 5 minutes.
+        poll_interval_minutes = entry.options.get(
+            CONF_POLL_INTERVAL,
+            entry.data.get(CONF_POLL_INTERVAL, DEFAULT_POLL_INTERVAL_MINUTES),
+        )
         super().__init__(
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=5),
+            update_interval=timedelta(minutes=poll_interval_minutes),
         )
         session = async_get_clientsession(hass)
         self.api = NetatmoHomeAPI(

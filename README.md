@@ -56,7 +56,13 @@ The required OAuth scope is `read_camera` (Security API access for smoke detecto
 | `GET /api/gethomedata` | Smoke detector names, setup dates, and events |
 | `GET /api/homestatus` | Firmware, last_seen, wifi_strength |
 
-Data is polled every 5 minutes. The refresh token is automatically persisted back to the config entry when Netatmo rotates it.
+Data is polled every 5 minutes by default. The refresh token is automatically persisted back to the config entry when Netatmo rotates it.
+
+## Poll interval configuration
+
+The poll interval can be set during setup and changed at any time via **Settings > Devices & Services > Netatmo Smoke Detectors > Configure** (integration options), in minutes (1–1440). Changing it reloads the integration immediately — no need to re-enter credentials.
+
+This option exists to prepare for **Netatmo's planned rate-limit reduction for polling-based APIs from March 1, 2027**: once the new limits are announced, raise the interval so that `poll_interval × 2 API calls` stays within the limit. The current usage at a 5-minute interval is about 24 requests/hour (2 calls per cycle; OAuth token refresh only happens when the access token expires or a call returns 401).
 
 ## Known Limitations
 
@@ -72,6 +78,8 @@ If Home Assistant crashes or restarts in this exact window, the next startup wil
 
 Netatmo's API limits are **50 requests / 10 seconds** and **500 requests / hour** per user per app. The integration makes 2–3 calls every 5 minutes (~36/hour), well within the limit.
 
+**Planned change (announced November 2026):** Netatmo plans to **reduce API rate limits for polling-based integrations from March 1, 2027** (exact new limits to be announced). The new [webhook service](https://dev.netatmo.com/apidocumentation/webhooks) is the recommended migration path, but it does **not** cover the Security API (`read_camera` scope) or the Smart Smoke Detector — webhooks are only available for Weather, Heating & Cooling, and Legrand/BTicino Smart Home Control gateways. Until NSD events become webhook-deliverable, the poll interval option is the mitigation: raise it to stay within the announced limits.
+
 However, Netatmo also applies a global WAF that can return HTTP 429 independently of your personal quota. The integration handles this automatically: it parses the `Retry-After` header (capped at 60 seconds) and waits before retrying (max 3 attempts).
 
 ## File structure
@@ -80,7 +88,7 @@ However, Netatmo also applies a global WAF that can return HTTP 429 independentl
 netatmo_smoke/
 ├── __init__.py          # Config entry setup/teardown
 ├── manifest.json        # Integration metadata
-├── config_flow.py       # UI config flow (client_id, client_secret, refresh_token)
+├── config_flow.py       # UI config flow (client_id, client_secret, refresh_token) + options flow (poll interval)
 ├── api.py               # Netatmo API client (OAuth2 + two endpoints)
 ├── coordinator.py       # DataUpdateCoordinator (5-min poll cycle)
 ├── binary_sensor.py     # Smoke detected binary sensor
