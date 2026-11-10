@@ -41,12 +41,16 @@ Each detector creates 5 entities:
 
 You need Netatmo API credentials:
 
-1. Go to [https://dev.netatmo.com](https://dev.netatmo.com) and create an app
+1. Go to [https://dev.netatmo.com](https://dev.netatmo.com), log in and create an app under **My Apps**
 2. Note your **Client ID** and **Client Secret**
-3. Generate a **Refresh Token** (use the app's OAuth2 flow with the `read_camera` scope)
-4. Enter these three values in the config flow
+3. On your app's page, scroll to the **Token Generator**, select only the
+   `read_smokedetector` scope, and click **Generate Token**
+4. Copy the **Refresh Token** shown in the result
+5. Enter these three values in the config flow
 
-The required OAuth scope is `read_camera` (Security API access for smoke detectors).
+The required OAuth scope is `read_smokedetector` (Smart Smoke Detector data via
+the Security API). The broader `read_camera` scope also works, but grants more
+access than this integration needs.
 
 ## API endpoints used
 
